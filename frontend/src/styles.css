@@ -357,6 +357,29 @@ body {
   color: #e5e7eb;
 }
 
+.market-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.4rem;
+}
+
+.market-link {
+  font-size: 0.75rem;
+  padding: 0.2rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid rgba(75, 85, 99, 0.9);
+  color: #e5e7eb;
+  text-decoration: none;
+  background: rgba(15, 23, 42, 0.95);
+  transition: background-color 0.12s ease, border-color 0.12s ease;
+}
+
+.market-link:hover {
+  border-color: #38bdf8;
+  background: rgba(15, 23, 42, 0.98);
+}
+
 .breakdown {
   font-size: 0.78rem;
   color: #9ca3af;

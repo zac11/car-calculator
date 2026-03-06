@@ -299,6 +299,8 @@ function renderApp() {
         `;
         resultsContainer.appendChild(summary);
 
+        const cityForSearch = (locationCity.value || "").trim();
+
         results.forEach((item) => {
           const card = document.createElement("article");
           card.className = "result-card";
@@ -310,6 +312,13 @@ function renderApp() {
           const fuelClass = item.fuelType === "ev" ? "ev" : "petrol";
           const breakEven =
             item.breakEvenKmPerMonth == null ? "No break-even" : `${Math.round(item.breakEvenKmPerMonth)} km / month`;
+
+          const query = encodeURIComponent(
+            [item.carName, cityForSearch].filter(Boolean).join(" ").trim() || item.carName
+          );
+          const carTradeUrl = `https://www.cartrade.com/buy-used-cars/?q=${query}`;
+          const carDekhoUrl = `https://www.cardekho.com/used-cars+cars+near+me.htm?city=${query}`;
+          const olxUrl = `https://www.olx.in/cars_c84?search[query]=${query}`;
 
           card.innerHTML = `
             <div class="result-header">
@@ -325,6 +334,11 @@ function renderApp() {
                 <span>/ month (all-in est.)</span>
               </div>
               <div class="delta ${deltaClass}">${formatDelta(item.deltaVsRideHailing)}</div>
+              <div class="market-links">
+                <a class="market-link" href="${carTradeUrl}" target="_blank" rel="noopener noreferrer">CarTrade</a>
+                <a class="market-link" href="${carDekhoUrl}" target="_blank" rel="noopener noreferrer">CarDekho</a>
+                <a class="market-link" href="${olxUrl}" target="_blank" rel="noopener noreferrer">OLX</a>
+              </div>
             </div>
             <div class="breakdown">
               <span>Fixed: ${formatCurrency(item.fixedPerMonth)}</span>
