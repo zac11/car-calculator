@@ -1,4 +1,4 @@
-(function(){const n=document.createElement("link").relList;if(n&&n.supports&&n.supports("modulepreload"))return;for(const e of document.querySelectorAll('link[rel="modulepreload"]'))l(e);new MutationObserver(e=>{for(const o of e)if(o.type==="childList")for(const m of o.addedNodes)m.tagName==="LINK"&&m.rel==="modulepreload"&&l(m)}).observe(document,{childList:!0,subtree:!0});function a(e){const o={};return e.integrity&&(o.integrity=e.integrity),e.referrerPolicy&&(o.referrerPolicy=e.referrerPolicy),e.crossOrigin==="use-credentials"?o.credentials="include":e.crossOrigin==="anonymous"?o.credentials="omit":o.credentials="same-origin",o}function l(e){if(e.ep)return;e.ep=!0;const o=a(e);fetch(e.href,o)}})();async function T(i){const n=await fetch("/api/calculate",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(i)});if(!n.ok){const a=await n.json().catch(()=>({}));throw new Error((a==null?void 0:a.error)||"Failed to fetch calculation")}return n.json()}function r(i){return`₹${Number(i||0).toLocaleString("en-IN",{maximumFractionDigits:0})}`}function h(i,n=1){return Number.isFinite(i)?i.toLocaleString("en-IN",{maximumFractionDigits:n,minimumFractionDigits:n}):"—"}function H(i){const n=Math.round(Math.abs(i));return n===0?"Same as Uber":(i<0?"Saves ":"Costs ")+r(n)+" / month vs Uber"}async function I({lat:i,lon:n}){const a=new URL("https://nominatim.openstreetmap.org/reverse");a.searchParams.set("format","jsonv2"),a.searchParams.set("lat",String(i)),a.searchParams.set("lon",String(n)),a.searchParams.set("zoom","10"),a.searchParams.set("addressdetails","1");const l=await fetch(a.toString(),{headers:{Accept:"application/json"}});return l.ok?await l.json().catch(()=>null):null}function S(){const i=document.getElementById("app");i.innerHTML=`
+(function(){const n=document.createElement("link").relList;if(n&&n.supports&&n.supports("modulepreload"))return;for(const t of document.querySelectorAll('link[rel="modulepreload"]'))l(t);new MutationObserver(t=>{for(const o of t)if(o.type==="childList")for(const d of o.addedNodes)d.tagName==="LINK"&&d.rel==="modulepreload"&&l(d)}).observe(document,{childList:!0,subtree:!0});function a(t){const o={};return t.integrity&&(o.integrity=t.integrity),t.referrerPolicy&&(o.referrerPolicy=t.referrerPolicy),t.crossOrigin==="use-credentials"?o.credentials="include":t.crossOrigin==="anonymous"?o.credentials="omit":o.credentials="same-origin",o}function l(t){if(t.ep)return;t.ep=!0;const o=a(t);fetch(t.href,o)}})();async function K(i){const n=await fetch("/api/calculate",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(i)});if(!n.ok){const a=await n.json().catch(()=>({}));throw new Error((a==null?void 0:a.error)||"Failed to fetch calculation")}return n.json()}function s(i){return`₹${Number(i||0).toLocaleString("en-IN",{maximumFractionDigits:0})}`}function h(i,n=1){return Number.isFinite(i)?i.toLocaleString("en-IN",{maximumFractionDigits:n,minimumFractionDigits:n}):"—"}function N(i){const n=Math.round(Math.abs(i));return n===0?"Same as Uber":(i<0?"Saves ":"Costs ")+s(n)+" / month vs Uber"}async function B({lat:i,lon:n}){const a=new URL("https://nominatim.openstreetmap.org/reverse");a.searchParams.set("format","jsonv2"),a.searchParams.set("lat",String(i)),a.searchParams.set("lon",String(n)),a.searchParams.set("zoom","10"),a.searchParams.set("addressdetails","1");const l=await fetch(a.toString(),{headers:{Accept:"application/json"}});return l.ok?await l.json().catch(()=>null):null}function R(){const i=document.getElementById("app");i.innerHTML=`
     <div class="page">
       <header class="header">
         <div>
@@ -136,42 +136,47 @@
         <p>This is an educational estimator. Real-world costs vary by city, fuel prices, car model, and your driving style.</p>
       </footer>
     </div>
-  `;const n=document.getElementById("calculator-form"),a=document.getElementById("results"),l=document.getElementById("summary-monthly-km"),e=document.getElementById("use-location"),o=document.getElementById("location-status"),m=document.getElementById("locationCity"),P=document.getElementById("locationState"),C=document.getElementById("locationLat"),M=document.getElementById("locationLon");e&&o&&m&&P&&C&&M&&e.addEventListener("click",()=>{if(!navigator.geolocation){o.textContent="Geolocation not supported in this browser.";return}e.disabled=!0,e.textContent="Getting…",o.textContent="Requesting permission…",navigator.geolocation.getCurrentPosition(async s=>{const p=s.coords.latitude,g=s.coords.longitude;C.value=h(p,6),M.value=h(g,6),o.textContent="Coordinates captured. Looking up city/state…";const d=await I({lat:p,lon:g}),c=(d==null?void 0:d.address)||{},u=c.city||c.town||c.village||c.suburb||"",v=c.state||"";u&&(m.value=u),v&&(P.value=v),o.textContent=u||v?`Set to ${[u,v].filter(Boolean).join(", ")}`:"Coordinates set",e.disabled=!1,e.textContent="Use my location"},s=>{const p=(s==null?void 0:s.code)===1?"Permission denied.":(s==null?void 0:s.code)===2?"Position unavailable.":(s==null?void 0:s.code)===3?"Timed out.":"Failed to get location.";o.textContent=p,e.disabled=!1,e.textContent="Use my location"},{enableHighAccuracy:!1,timeout:1e4,maximumAge:6e5})}),n.addEventListener("submit",s=>{s.preventDefault();const p=new FormData(n),g=Object.fromEntries(p.entries());a.innerHTML='<p class="placeholder">Calculating…</p>',l.textContent="",T(g).then(d=>{const{monthlyKm:c,rideHailingCostPerMonth:u,rideHailingCostPerKm:v,results:f}=d;if(l.textContent=`Estimated driving: ${c.toFixed(0)} km / month · Current Uber spend: ${r(u)} / month`,!f||f.length===0){a.innerHTML='<p class="placeholder">No cars available in the catalog.</p>';return}const L=f[0];a.innerHTML="";const y=document.createElement("section");y.className="summary-card",y.innerHTML=`
+  `;const n=document.getElementById("calculator-form"),a=document.getElementById("results"),l=document.getElementById("summary-monthly-km"),t=document.getElementById("use-location"),o=document.getElementById("location-status"),d=document.getElementById("locationCity"),C=document.getElementById("locationState"),k=document.getElementById("locationLat"),M=document.getElementById("locationLon");t&&o&&d&&C&&k&&M&&t.addEventListener("click",()=>{if(!navigator.geolocation){o.textContent="Geolocation not supported in this browser.";return}t.disabled=!0,t.textContent="Getting…",o.textContent="Requesting permission…",navigator.geolocation.getCurrentPosition(async r=>{const p=r.coords.latitude,f=r.coords.longitude;k.value=h(p,6),M.value=h(f,6),o.textContent="Coordinates captured. Looking up city/state…";const u=await B({lat:p,lon:f}),c=(u==null?void 0:u.address)||{},m=c.city||c.town||c.village||c.suburb||"",v=c.state||"";m&&(d.value=m),v&&(C.value=v),o.textContent=m||v?`Set to ${[m,v].filter(Boolean).join(", ")}`:"Coordinates set",t.disabled=!1,t.textContent="Use my location"},r=>{const p=(r==null?void 0:r.code)===1?"Permission denied.":(r==null?void 0:r.code)===2?"Position unavailable.":(r==null?void 0:r.code)===3?"Timed out.":"Failed to get location.";o.textContent=p,t.disabled=!1,t.textContent="Use my location"},{enableHighAccuracy:!1,timeout:1e4,maximumAge:6e5})}),n.addEventListener("submit",r=>{r.preventDefault();const p=new FormData(n),f=Object.fromEntries(p.entries());a.innerHTML='<p class="placeholder">Calculating…</p>',l.textContent="",K(f).then(u=>{const{monthlyKm:c,rideHailingCostPerMonth:m,rideHailingCostPerKm:v,results:g}=u;if(l.textContent=`Estimated driving: ${c.toFixed(0)} km / month · Current Uber spend: ${s(m)} / month`,!g||g.length===0){a.innerHTML='<p class="placeholder">No cars available in the catalog.</p>';return}const w=g[0];a.innerHTML="";const y=document.createElement("section");y.className="summary-card",y.innerHTML=`
           <div>
             <div class="summary-title">Summary</div>
             <div class="summary-sub">All numbers are estimates. Edit assumptions to see what changes.</div>
           </div>
           <div class="summary-metrics">
             <div>Monthly km: <strong>${Math.round(c)}</strong></div>
-            <div>Uber: <strong>${r(u)}</strong> / month</div>
+            <div>Uber: <strong>${s(m)}</strong> / month</div>
             <div>Uber ₹/km: <strong>${h(v,1)}</strong></div>
-            <div>Best option: <strong>${L.carName}</strong></div>
+            <div>Best option: <strong>${w.carName}</strong></div>
           </div>
-        `,a.appendChild(y),f.forEach(t=>{const b=document.createElement("article");b.className="result-card";const k=t===L,w=t.deltaVsRideHailing<-1e3?"negative":t.deltaVsRideHailing>1e3?"positive":"neutral",$=t.condition==="used"?"used":"new",x=t.fuelType==="ev"?"ev":"petrol",E=t.breakEvenKmPerMonth==null?"No break-even":`${Math.round(t.breakEvenKmPerMonth)} km / month`;b.innerHTML=`
+        `,a.appendChild(y);const L=(d.value||"").trim();g.forEach(e=>{const b=document.createElement("article");b.className="result-card";const $=e===w,x=e.deltaVsRideHailing<-1e3?"negative":e.deltaVsRideHailing>1e3?"positive":"neutral",E=e.condition==="used"?"used":"new",T=e.fuelType==="ev"?"ev":"petrol",D=e.breakEvenKmPerMonth==null?"No break-even":`${Math.round(e.breakEvenKmPerMonth)} km / month`,P=encodeURIComponent([e.carName,L].filter(Boolean).join(" ").trim()||e.carName),I=`https://www.cartrade.com/buy-used-cars/?q=${P}`,S=`https://www.cardekho.com/used-cars+cars+near+me.htm?city=${P}`,H=`https://www.olx.in/cars_c84?search[query]=${P}`;b.innerHTML=`
             <div class="result-header">
-              <div class="result-title">${t.carName}${k?" · Best match":""}</div>
+              <div class="result-title">${e.carName}${$?" · Best match":""}</div>
               <div class="result-tags">
-                <span class="tag ${$}">${t.condition.toUpperCase()}</span>
-                <span class="tag ${x}">${t.fuelType.toUpperCase()}</span>
-                <span class="tag">On-road approx ${r(t.onRoadPrice)}</span>
-                <span class="tag">Break-even: ${E}</span>
+                <span class="tag ${E}">${e.condition.toUpperCase()}</span>
+                <span class="tag ${T}">${e.fuelType.toUpperCase()}</span>
+                <span class="tag">On-road approx ${s(e.onRoadPrice)}</span>
+                <span class="tag">Break-even: ${D}</span>
               </div>
               <div class="cost-pill">
-                <strong>${r(t.totalPerMonth)}</strong>
+                <strong>${s(e.totalPerMonth)}</strong>
                 <span>/ month (all-in est.)</span>
               </div>
-              <div class="delta ${w}">${H(t.deltaVsRideHailing)}</div>
+              <div class="delta ${x}">${N(e.deltaVsRideHailing)}</div>
+              <div class="market-links">
+                <a class="market-link" href="${I}" target="_blank" rel="noopener noreferrer">CarTrade</a>
+                <a class="market-link" href="${S}" target="_blank" rel="noopener noreferrer">CarDekho</a>
+                <a class="market-link" href="${H}" target="_blank" rel="noopener noreferrer">OLX</a>
+              </div>
             </div>
             <div class="breakdown">
-              <span>Fixed: ${r(t.fixedPerMonth)}</span>
-              <span>Variable (energy): ${r(t.variablePerMonth)}</span>
-              <span>Total ₹/km: ${h(t.totalCostPerKm,1)}</span>
-              <span>Variable ₹/km: ${h(t.variableCostPerKm,1)}</span>
-              <span>Depreciation: ${r(t.depreciationPerMonth)}</span>
-              <span>Maintenance: ${r(t.maintenancePerMonth)}</span>
-              <span>Insurance: ${r(t.insurancePerMonth)}</span>
-              <span>Parking+misc: ${r(t.parkingAndMiscPerMonth)}</span>
-              <span>Total km / month: ${Math.round(t.monthlyKm)} km</span>
-              <span>±20% km cost: ${r(t.sensitivity.totalLow)} to ${r(t.sensitivity.totalHigh)}</span>
+              <span>Fixed: ${s(e.fixedPerMonth)}</span>
+              <span>Variable (energy): ${s(e.variablePerMonth)}</span>
+              <span>Total ₹/km: ${h(e.totalCostPerKm,1)}</span>
+              <span>Variable ₹/km: ${h(e.variableCostPerKm,1)}</span>
+              <span>Depreciation: ${s(e.depreciationPerMonth)}</span>
+              <span>Maintenance: ${s(e.maintenancePerMonth)}</span>
+              <span>Insurance: ${s(e.insurancePerMonth)}</span>
+              <span>Parking+misc: ${s(e.parkingAndMiscPerMonth)}</span>
+              <span>Total km / month: ${Math.round(e.monthlyKm)} km</span>
+              <span>±20% km cost: ${s(e.sensitivity.totalLow)} to ${s(e.sensitivity.totalHigh)}</span>
             </div>
-          `,a.appendChild(b)})}).catch(d=>{a.innerHTML=`<p class="placeholder">${d.message||"Something went wrong. Please try again."}</p>`})})}S();
+          `,a.appendChild(b)})}).catch(u=>{a.innerHTML=`<p class="placeholder">${u.message||"Something went wrong. Please try again."}</p>`})})}R();
