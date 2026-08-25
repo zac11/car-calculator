@@ -65,6 +65,32 @@ const cars = [
     efficiency: 16,
     maintenanceFactor: 0.22,
     insuranceRateYearlyPct: 3
+  },
+  {
+    id: "used-cng-hatch-1",
+    name: "Used CNG Hatchback",
+    brand: "Generic",
+    variant: "1.2L CNG",
+    condition: "used",
+    fuelType: "cng",
+    onRoadPrice: 400000,
+    // km per kg of CNG
+    efficiency: 28,
+    maintenanceFactor: 0.38,
+    insuranceRateYearlyPct: 3
+  },
+  {
+    id: "new-cng-sedan-1",
+    name: "New CNG Sedan",
+    brand: "Generic",
+    variant: "1.5L CNG",
+    condition: "new",
+    fuelType: "cng",
+    onRoadPrice: 900000,
+    // km per kg of CNG
+    efficiency: 25,
+    maintenanceFactor: 0.32,
+    insuranceRateYearlyPct: 3
   }
 ];
 

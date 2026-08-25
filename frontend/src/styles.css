@@ -314,6 +314,11 @@ body {
   background: linear-gradient(135deg, rgba(45, 212, 191, 0.2), rgba(16, 185, 129, 0.12));
 }
 
+.tag.cng {
+  border-color: rgba(250, 204, 21, 0.7);
+  background: linear-gradient(135deg, rgba(250, 204, 21, 0.18), rgba(234, 179, 8, 0.1));
+}
+
 .tag.used {
   border-color: rgba(249, 115, 22, 0.7);
   background: linear-gradient(135deg, rgba(249, 115, 22, 0.2), rgba(161, 98, 7, 0.15));

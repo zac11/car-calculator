@@ -96,6 +96,11 @@ function renderApp() {
             </div>
 
             <div class="field">
+              <label for="cngPricePerKg">CNG price (₹/kg)</label>
+              <input id="cngPricePerKg" name="cngPricePerKg" type="number" value="90" min="0" step="0.1" />
+            </div>
+
+            <div class="field">
               <label for="electricityPricePerKwh">
                 Electricity price (₹/kWh) <span class="required">*</span>
               </label>
@@ -309,7 +314,7 @@ function renderApp() {
           const deltaClass =
             item.deltaVsRideHailing < -1000 ? "negative" : item.deltaVsRideHailing > 1000 ? "positive" : "neutral";
           const conditionClass = item.condition === "used" ? "used" : "new";
-          const fuelClass = item.fuelType === "ev" ? "ev" : "petrol";
+          const fuelClass = item.fuelType === "ev" ? "ev" : item.fuelType === "cng" ? "cng" : "petrol";
           const breakEven =
             item.breakEvenKmPerMonth == null ? "No break-even" : `${Math.round(item.breakEvenKmPerMonth)} km / month`;
 

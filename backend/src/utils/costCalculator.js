@@ -41,7 +41,7 @@ function getDepreciationRateYearlyPct({ car, depreciationRateYearlyPctOverride }
   if (car.condition === "new") {
     return car.fuelType === "ev" ? 12 : 10;
   }
-  return car.fuelType === "ev" ? 10 : 8;
+  return car.fuelType === "ev" ? 10 : 8; // petrol and cng share the same default
 }
 
 function calculateCarMonthlyCost({
@@ -49,6 +49,7 @@ function calculateCarMonthlyCost({
   monthlyKm,
   petrolPricePerLitre,
   electricityPricePerKwh,
+  cngPricePerKg,
   usesPublicCharging,
   publicChargingMultiplier,
   loanDownPaymentPct,
@@ -81,6 +82,9 @@ function calculateCarMonthlyCost({
       ? electricityPricePerKwh * publicChargingMultiplier
       : electricityPricePerKwh;
     energyCostPerMonth = kwhPerMonth * effectiveElectricityPrice;
+  } else if (car.fuelType === "cng") {
+    const kgPerMonth = monthlyKm / car.efficiency;
+    energyCostPerMonth = kgPerMonth * cngPricePerKg;
   }
 
   const maintenancePerMonth = (car.maintenanceFactor * price) / 1000;
@@ -144,6 +148,7 @@ function buildComparison({
       monthlyKm,
       petrolPricePerLitre: params.petrolPricePerLitre,
       electricityPricePerKwh: params.electricityPricePerKwh,
+      cngPricePerKg: params.cngPricePerKg,
       usesPublicCharging: car.fuelType === "ev" ? !params.hasHomeCharging : false,
       publicChargingMultiplier: params.publicChargingMultiplier,
       loanDownPaymentPct: params.loanDownPaymentPct,

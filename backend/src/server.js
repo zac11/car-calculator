@@ -56,6 +56,7 @@ app.post("/api/calculate", (req, res) => {
       otherKmPerMonth: Number(body.otherKmPerMonth) || 200,
       rideHailingCostPerMonth: Number(body.rideHailingCostPerMonth) || 15000,
       petrolPricePerLitre: Number(body.petrolPricePerLitre) || 105,
+      cngPricePerKg: Number(body.cngPricePerKg) || 90,
       electricityPricePerKwh,
       loanDownPaymentPct: Number(body.loanDownPaymentPct) || 20,
       loanTenureYears: Number(body.loanTenureYears) || 5,
